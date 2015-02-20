@@ -109,7 +109,8 @@ class TxPage(wx.Panel):
 		dc.Clear()
 		if (self.backgroundImage):
 			dc.DrawBitmap(self.backgroundImage, 0, 0)
-
+			
+	#save recipient's information
 	def OnSave(self, event):
 		lines  = []
 		lines.append(self.textFIOtx.GetValue().encode('unicode-escape') + u'\n')
