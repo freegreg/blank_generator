@@ -10,44 +10,36 @@ import webbrowser
 
 class TxPage(wx.Panel):
 
-	def __init__(self, parent):
+	def __init__(self, parent, DataRxTx):
 		self.dirname=''
-		
+		self.DataRxTx = DataRxTx
 		# A "-1" in the size parameter instructs wxWidgets to use the default size.
 		# In this case, we select 200px width and the default height.
-		settings_file = open("settings_tx", "r")
-		with settings_file as f:
-			lines = [line.decode('unicode-escape').rstrip(u'\n') for line in f]
-		settings_file.close()
-		if (len(lines) != 9):
-			for index in range(0, 9):
-				lines.append(u'')
-
 		wx.Panel.__init__(self, parent)
 		
 		self.quoteFIOtx = wx.StaticText(self, label=u"ФИО отправителя")
-		self.textFIOtx = wx.TextCtrl(self, style=wx.TE_RIGHT, value = lines[0])
+		self.textFIOtx = wx.TextCtrl(self, style=wx.TE_RIGHT, value = self.DataRxTx.GetFioTx())
 		
 		self.quoteADRtx = wx.StaticText(self, label=u"Адрес отправителя")
-		self.textADRtx = wx.TextCtrl(self, style=wx.TE_RIGHT, value = lines[1])
+		self.textADRtx = wx.TextCtrl(self, style=wx.TE_RIGHT, value = self.DataRxTx.GetAddressTx())
 		
 		self.quoteINDtx = wx.StaticText(self, label=u"Индекс отправителя")
-		self.textINDtx = wx.TextCtrl(self, style=wx.TE_RIGHT, value = lines[2])
+		self.textINDtx = wx.TextCtrl(self, style=wx.TE_RIGHT, value = self.DataRxTx.GetIndexTx())
 		
 		self.quoteIDtx = wx.StaticText(self, label=u"Предъявил ")
-		self.textIDtx = wx.TextCtrl(self, style=wx.TE_RIGHT, value = lines[3])
+		self.textIDtx = wx.TextCtrl(self, style=wx.TE_RIGHT, value = self.DataRxTx.GetPassportIDTx())
 		self.quoteSeriatx = wx.StaticText(self, label=u"серия ")
-		self.textSeriatx = wx.TextCtrl(self, style=wx.TE_RIGHT, value = lines[4])
+		self.textSeriatx = wx.TextCtrl(self, style=wx.TE_RIGHT, value = self.DataRxTx.GetPassportSerialTx())
 		self.quoteNumbertx = wx.StaticText(self, label=u"номер ")
-		self.textNumbertx = wx.TextCtrl(self, style=wx.TE_RIGHT, value = lines[5])
+		self.textNumbertx = wx.TextCtrl(self, style=wx.TE_RIGHT, value = self.DataRxTx.GetPassportNumberTx())
 		
 		self.quoteIDDatatx = wx.StaticText(self, label=u"выдан ")
-		self.textIDDatatx = wx.TextCtrl(self, style=wx.TE_RIGHT, value = lines[6])
+		self.textIDDatatx = wx.TextCtrl(self, style=wx.TE_RIGHT, value = self.DataRxTx.GetPassportDataTx())
 		self.quoteIDYeartx = wx.StaticText(self, label=u"20")
-		self.textIDYeartx = wx.TextCtrl(self, style=wx.TE_RIGHT, value = lines[7])
+		self.textIDYeartx = wx.TextCtrl(self, style=wx.TE_RIGHT, value = self.DataRxTx.GetPassportYearTx())
 		
 		self.quoteIDAdrtx = wx.StaticText(self, label=u"Наименование учрежения")
-		self.textIDAdrtx = wx.TextCtrl(self, style=wx.TE_RIGHT, value = lines[8])
+		self.textIDAdrtx = wx.TextCtrl(self, style=wx.TE_RIGHT, value = self.DataRxTx.GetPassportAddressTx())
 
 		self.saveButton = wx.Button(self, wx.ID_CLEAR, u"Сохранить")
 
@@ -122,12 +114,4 @@ class TxPage(wx.Panel):
 		lines.append(self.textIDDatatx.GetValue().encode('unicode-escape') + u'\n')
 		lines.append(self.textIDYeartx.GetValue().encode('unicode-escape') + u'\n')
 		lines.append(self.textIDAdrtx.GetValue().encode('unicode-escape') + u'\n')
-		settings_file = open("settings_tx", "w")
-		with settings_file as f:
-			for s in lines:
-				f.write(s)
-		settings_file.close()
-		
-#app = wx.App(False)
-#frame = MainWindow(None, u"Бланк v1.0")
-#app.MainLoop()
+		self.DataRxTx.SaveSenderInformation(lines);

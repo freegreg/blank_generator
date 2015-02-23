@@ -5,6 +5,8 @@ import blank_tx
 
 import os.path
 import sys
+from infoRxTx import infoRxTx
+
 class MainFrame(wx.Frame):
 	def __init__(self):
 		wx.Frame.__init__(self, None, title= u"Интерет Магазин Пневматики Popadiv10.ru", pos=(150,150), size=(830,670))
@@ -36,9 +38,12 @@ class MainFrame(wx.Frame):
 		panel = wx.Panel(self)
 		nb = wx.Notebook(panel)
 		
+		# Create object for information manipulating 
+		DataRxTx = infoRxTx()
+		
 		# create the page windows as children of the notebook
-		TxPage = blank_tx.TxPage(nb)
-		RxPage = blank_rx.RxPage(nb, TxPage)
+		TxPage = blank_tx.TxPage(nb, DataRxTx)
+		RxPage = blank_rx.RxPage(nb, TxPage, DataRxTx)
 		
 		TxPage.Disable()
 		# add the pages to the notebook with the label to show on the tab
