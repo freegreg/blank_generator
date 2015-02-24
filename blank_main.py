@@ -43,15 +43,16 @@ class MainFrame(wx.Frame):
 		
 		# create the page windows as children of the notebook
 		TxPage = blank_tx.TxPage(nb, DataRxTx)
-		RxPage = blank_rx.RxPage(nb, TxPage, DataRxTx)
+		RxPage = blank_rx.RxPage(nb, DataRxTx)
 		
-		TxPage.Disable()
+		#TxPage.Disable()
 		# add the pages to the notebook with the label to show on the tab
 		nb.AddPage(RxPage, u"Бланк 1 - Данные получателя")
 		nb.AddPage(TxPage, u"Бланк 2 - Данные отправителя")
+		
+		sizer = wx.BoxSizer(wx.VERTICAL)
+		sizer.Add(nb, 1, wx.EXPAND | wx.ALIGN_TOP, 5)
 
-		sizer = wx.BoxSizer()
-		sizer.Add(nb, 1, wx.ALL|wx.EXPAND, 5)
 		panel.SetSizer(sizer)
 		
 	def OnAbout(self,e):
@@ -62,7 +63,7 @@ class MainFrame(wx.Frame):
 
 	def OnExit(self,e):
 		self.Close(True)  # Close the frame.
-
+	
 if __name__ == "__main__":
 	app = wx.App()
 	MainFrame().Show()

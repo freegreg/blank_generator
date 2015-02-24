@@ -75,3 +75,6 @@ class infoRxTx:
 			for s in lines:
 				f.write(s)
 		settings_file.close()
+		
+	def SetRecipientInformation(self, lines):
+		self.lines_rx = list(lines)

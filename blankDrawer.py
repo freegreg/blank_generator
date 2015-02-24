@@ -38,8 +38,8 @@ def SplitString(strToSplit, lines):
 	
 def GetCashFontSize(summ_str):
 	length_summ_str = len(summ_str)
-	font_size =  40
-	if (length_summ_str > 35 and length_summ_str <= 40):
+	font_size =  39
+	if (length_summ_str > 35 and length_summ_str <= 39):
 		font_size = 33
 	elif (length_summ_str > 40 and length_summ_str <= 45):
 		font_size = 29
@@ -54,7 +54,7 @@ def GetCashFontSize(summ_str):
 def DrawBlank1(imageBlank1, DataRxTx, cash):
 	#draw recipient's name on "blank 1"
 	font = ImageFont.truetype("ttf\DejaVuSans.ttf", 35)
-	print DataRxTx.GetFioRx()
+	#print DataRxTx.GetFioRx()
 	imageBlank1.text((385, 1615), DataRxTx.GetFioRx(), (0,0,0), font = font)
 	
 	#self.DrawTextOnImage(imageBlank1, DataRxTx.GetFioRx(), 35, 385, 1615);
@@ -68,7 +68,7 @@ def DrawBlank1(imageBlank1, DataRxTx, cash):
 	imageBlank1.text((230, 1780), adr_lines[1], (0,0,0), font = font)
 	
 	#draw recipient's index on "blank 1"
-	ind = DataRxTx.GetIndexRx()
+	ind = str(DataRxTx.GetIndexRx())
 	font = ImageFont.truetype("ttf\DejaVuSans.ttf", 70)
 	if (len(ind) == 6):
 		for i in range(0, 6):
@@ -139,7 +139,7 @@ def DrawBlank2(imageBlank2, DataRxTx, cash):
 	
 	#draw recipient's address "blank 2"
 	adr = DataRxTx.GetAddressRx()
-	lines_lens = [30, 35, 25]
+	lines_lens = [35, 45, 25]
 	where_lines = SplitString(adr, lines_lens)
 	imageBlank2.text((400, 985), where_lines[0], (0,0,0), font = font)
 	imageBlank2.text((260, 1035), where_lines[1], (0,0,0), font = font)
@@ -201,7 +201,7 @@ def DrawBlank3(imagePck, DataRxTx, cash):
 	#draw recipient's name on "posilka blank"
 	font = ImageFont.truetype("ttf\DejaVuSans.ttf", 25)
 	fio = DataRxTx.GetFioRx()
-	lines_lens = [30, 40, 0]
+	lines_lens = [30, 30, 0]
 	fio_lines = SplitString(fio, lines_lens)
 	imagePck.text((520, 390), fio_lines[0], (0,0,0), font = font)
 	imagePck.text((470, 430), fio_lines[1], (0,0,0), font = font)
@@ -209,7 +209,7 @@ def DrawBlank3(imagePck, DataRxTx, cash):
 
 	#draw recipient's address on "posilka blank"
 	font = ImageFont.truetype("ttf\DejaVuSans.ttf", 30)
-	lines_lens = [25, 35, 35]
+	lines_lens = [25, 30, 30]
 	adr_lines = SplitString(DataRxTx.GetAddressRx(), lines_lens)
 	imagePck.text((530, 467), adr_lines[0], (0,0,0), font = font)
 	imagePck.text((480, 505), adr_lines[1], (0,0,0), font = font)
@@ -257,7 +257,7 @@ def DrawBlank3(imagePck, DataRxTx, cash):
 		trash, rub = math.modf(float(summ))
 		
 		#draw sum of cash (rubles) with words on "posilka blank"
-		font = ImageFont.truetype("ttf\DejaVuSans.ttf", GetCashFontSize(summ_str) - 10)
+		font = ImageFont.truetype("ttf\DejaVuSans.ttf", GetCashFontSize(summ_str) - 13)
 		imagePck.text((445, 270), summ_str, (0,0,0), font = font)
 		
 		font = ImageFont.truetype("ttf\DejaVuSans.ttf", 35)

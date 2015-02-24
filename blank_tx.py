@@ -11,7 +11,7 @@ import webbrowser
 class TxPage(wx.Panel):
 
 	def __init__(self, parent, DataRxTx):
-		self.dirname=''
+
 		self.DataRxTx = DataRxTx
 		# A "-1" in the size parameter instructs wxWidgets to use the default size.
 		# In this case, we select 200px width and the default height.
