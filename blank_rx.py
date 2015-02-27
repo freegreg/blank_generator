@@ -7,6 +7,8 @@ import webbrowser
 from PIL import Image
 from PIL import ImageDraw
 from xlrd import open_workbook, XLRDError
+import os
+import re
 
 class RxPage(wx.Panel):
 	def __init__(self, parent, DataRxTx):
@@ -208,7 +210,15 @@ class RxPage(wx.Panel):
 						list_from_excel[0] = str(values[0]) if not isinstance(values[0], unicode) else values[0]
 						list_from_excel[1] = str(values[2]) if not isinstance(values[2], unicode) else values[2]
 						list_from_excel[2] = str(int(values[3])) if not isinstance(values[3], unicode) else values[3]
+						if (not list_from_excel[2].isdigit()):
+							self.Warn(u"Неверный почтовый индекс в строке %d" % index_row)
+							list_from_excel[2] =re.sub("[^0-9]", "", list_from_excel[2])
 						list_from_excel[3] = str(values[1]) if not isinstance(values[1], unicode) else values[1]
+						try:
+							float(list_from_excel[3])
+						except ValueError:
+							self.Warn(u"Неверная сумма наложенного платежа в строке %d" % index_row)
+							list_from_excel[3] = "0.0"
 						#list_from_excel.append(list_from_excel[1])
 						#del list_from_excel[1]
 						self.DataRxTx.SetRecipientInformation(list_from_excel)
@@ -219,13 +229,13 @@ class RxPage(wx.Panel):
 						imgpcknew = imgpck.copy() 
 						drawpck = ImageDraw.Draw(imgpcknew)
 						if (values[1] > 0):
-							blankDrawer.DrawBlank1(draw1, self.DataRxTx, values[1] > 0)
+							blankDrawer.DrawBlankCash(draw1, self.DataRxTx, values[1] > 0)
 							count = count + delta_count
 							dialog.Update(count)
-						blankDrawer.DrawBlank2(draw2, self.DataRxTx, values[1] > 0)
+						blankDrawer.DrawBlankMain(draw2, self.DataRxTx, values[1] > 0)
 						count = count + delta_count
 						dialog.Update(count)
-						blankDrawer.DrawBlank3(drawpck, self.DataRxTx, values[1] > 0)
+						blankDrawer.DrawBlankAddress(drawpck, self.DataRxTx, values[1] > 0)
 						count = count + delta_count
 						dialog.Update(count)
 						if (self.PathToBlanksFolder):
@@ -235,12 +245,19 @@ class RxPage(wx.Panel):
 							imgpcknew.save(self.PathToBlanksFolder + u"\бланк_адресной_" + str(index_row) + u".jpg")
 						#print u','.join(list_from_excel)
 					index_row = index_row + 1
+					
+			settings_file = open("settings_paths", "w")
+			settings_file.write(self.PathToExcelFile.encode('unicode-escape') + u'\n')
+			settings_file.write(self.PathToBlanksFolder.encode('unicode-escape')+ u'\n')
+			settings_file.close()
 			dialog.Destroy()
+			os.startfile(self.PathToBlanksFolder) # opens explorer
 			
 		else:
-			blankDrawer.DrawBlank1(draw1, self.DataRxTx, self.cbSUM.GetValue())
-			blankDrawer.DrawBlank2(draw2, self.DataRxTx, self.cbSUM.GetValue())
-			blankDrawer.DrawBlank3(drawpck, self.DataRxTx, self.cbSUM.GetValue())
+			self.saveRecipientInfo()
+			blankDrawer.DrawBlankCash(draw1, self.DataRxTx, self.cbSUM.GetValue())
+			blankDrawer.DrawBlankMain(draw2, self.DataRxTx, self.cbSUM.GetValue())
+			blankDrawer.DrawBlankAddress(drawpck, self.DataRxTx, self.cbSUM.GetValue())
 				
 			#Draw and Save blanks
 			draw1 = ImageDraw.Draw(img1new)
@@ -256,12 +273,9 @@ class RxPage(wx.Panel):
 			path = self.saveFile(u" бланк адресной")
 			if (path):
 				imgpcknew.save(path)
-				
-			self.saveRecipientInfo()
-		settings_file = open("settings_paths", "w")
-		settings_file.write(self.PathToExcelFile.encode('unicode-escape') + u'\n')
-		settings_file.write(self.PathToBlanksFolder.encode('unicode-escape')+ u'\n')
-		settings_file.close()
+				#self.DataRxTx.SetRecipientInformation(list_from_excel)
+			
+
 		
 	def saveRecipientInfo(self):
 		#Save settings recipient
@@ -270,7 +284,8 @@ class RxPage(wx.Panel):
 		lines.append(self.textADRrx.GetValue().encode('unicode-escape') + u'\n')
 		lines.append(self.textINDrx.GetValue().encode('unicode-escape') + u'\n')
 		lines.append(self.textSUMrx.GetValue().encode('unicode-escape') + u'\n')
-		self.DataRxTx.SaveRecipientInformation(lines);
+		self.DataRxTx.SetRecipientInformation([line.decode('unicode-escape').rstrip(u'\n') for line in lines])
+		self.DataRxTx.SaveRecipientInformation(lines)
 	
 	def saveFile(self, what_blank):
 		saveFileDialog = wx.FileDialog(self, u"Сохранить как" + what_blank, "", what_blank, "Blank files (*.jpg)|*.jpg", wx.FD_SAVE | wx.FD_OVERWRITE_PROMPT)								   

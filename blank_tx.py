@@ -114,4 +114,4 @@ class TxPage(wx.Panel):
 		lines.append(self.textIDDatatx.GetValue().encode('unicode-escape') + u'\n')
 		lines.append(self.textIDYeartx.GetValue().encode('unicode-escape') + u'\n')
 		lines.append(self.textIDAdrtx.GetValue().encode('unicode-escape') + u'\n')
-		self.DataRxTx.SaveSenderInformation(lines);
+		self.DataRxTx.SaveSenderInformation(lines)

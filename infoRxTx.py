@@ -69,12 +69,21 @@ class infoRxTx:
 				f.write(s)
 		settings_file.close()
 		
+		#Open file with sender's information
+		file_tx = open("settings_tx", "r")
+		with file_tx as f:
+			self.lines_tx = [line.decode('unicode-escape').rstrip(u'\n') for line in f]
+		file_tx.close()	
+		
 	def SaveRecipientInformation(self, lines):
 		settings_file = open("settings_rx", "w")
 		with settings_file as f:
 			for s in lines:
 				f.write(s)
 		settings_file.close()
-		
+				
 	def SetRecipientInformation(self, lines):
 		self.lines_rx = list(lines)
+		
+	def SetSenderInformation(self, lines):
+		self.lines_tx = list(lines)
