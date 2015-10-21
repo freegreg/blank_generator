@@ -197,9 +197,9 @@ class RxPage(wx.Panel):
 				if (s.ncols < 4):
 					self.Warn(u"Неверное количество столбцов!")
 					return
-				progressMax = 300
+				progressMax = s.nrows * 3
 				dialog = wx.ProgressDialog(u"Обработка", u"Подождите", progressMax, style=wx.PD_CAN_ABORT | wx.PD_ELAPSED_TIME | wx.PD_REMAINING_TIME)
-				delta_count = progressMax/s.nrows/3
+				delta_count = 1
 				count = 0
 				for row in range(s.nrows):
 					if (index_row > 0): 
@@ -212,13 +212,18 @@ class RxPage(wx.Panel):
 						list_from_excel[2] = str(int(values[3])) if not isinstance(values[3], unicode) else values[3]
 						if (not list_from_excel[2].isdigit()):
 							self.Warn(u"Неверный почтовый индекс в строке %d" % index_row)
-							list_from_excel[2] =re.sub("[^0-9]", "", list_from_excel[2])
+							list_from_excel[2] = re.sub("[^0-9]", "", list_from_excel[2])
 						list_from_excel[3] = str(values[1]) if not isinstance(values[1], unicode) else values[1]
 						try:
 							float(list_from_excel[3])
 						except ValueError:
 							self.Warn(u"Неверная сумма наложенного платежа в строке %d" % index_row)
 							list_from_excel[3] = "0.0"
+						try:
+							list_from_excel[4] = int(values[4])
+						except ValueError:
+							list_from_excel[4] = values[4]
+						list_from_excel[4] = str(list_from_excel[4])
 						#list_from_excel.append(list_from_excel[1])
 						#del list_from_excel[1]
 						self.DataRxTx.SetRecipientInformation(list_from_excel)
@@ -235,7 +240,7 @@ class RxPage(wx.Panel):
 						blankDrawer.DrawBlankMain(draw2, self.DataRxTx, values[1] > 0)
 						count = count + delta_count
 						dialog.Update(count)
-						blankDrawer.DrawBlankAddress(drawpck, self.DataRxTx, values[1] > 0)
+						blankDrawer.DrawBlankAddress(drawpck, self.DataRxTx, values[1] > 0, [1748, 1240])
 						count = count + delta_count
 						dialog.Update(count)
 						if (self.PathToBlanksFolder):

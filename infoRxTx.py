@@ -7,7 +7,7 @@ class infoRxTx:
 	lines_tx = []
 	def __init__(self):
 
-		for index in range(0, 4):
+		for index in range(0, 5):
 			self.lines_rx.append(u'')
 		for index in range(0, 9):
 			self.lines_tx.append(u'')
@@ -34,6 +34,9 @@ class infoRxTx:
 		
 	def GetCashSum(self):
 		return self.lines_rx[3]
+	
+	def GetPackNumber(self):
+		return self.lines_rx[4]
 		
 	def GetFioTx(self):
 		return self.lines_tx[0]

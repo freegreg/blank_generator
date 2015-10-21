@@ -188,59 +188,84 @@ def DrawBlankMain(imageBlank2, DataRxTx, cash):
 		for i in range(0, 6):
 			imageBlank2.text((1160 + 58 * i, 2275), ind[i], (0,0,0), font = font)
 	
-def DrawBlankAddress(imagePck, DataRxTx, cash):
+def DrawBlankAddress(imagePck, DataRxTx, cash, resolution):
+	dict_coordinates = {}
+	dict_coordinates['pack_number'] = [(10,10),(60, 60)]
+	dict_coordinates['recipients_name_1'] = [(520,390),(950, 700)]
+	dict_coordinates['recipients_name_2'] = [(470,430),(850, 770)]
+	dict_coordinates['recipients_address_1'] = [(530,467),(950, 840)]
+	dict_coordinates['recipients_address_2'] = [(480,505),(850, 910)]
+	dict_coordinates['recipients_address_3'] = [(480,540),(850, 980)]
+	dict_coordinates['recipients_address_4'] = [(480,575),(850, 1050)]
+	dict_coordinates['recipient_index1'] = [(90,600),(150, 1070)]
+	dict_coordinates['recipient_index2'] = [(90,600),(1350, 960)]
+	#draw pack Number
+	font = ImageFont.truetype("ttf\DejaVuSans.ttf", 70)
+	imagePck.text(dict_coordinates['pack_number'][1], DataRxTx.GetPackNumber(), (0,0,0), font = font)
+	
 	#draw recipient's name on "posilka blank"
 	font = ImageFont.truetype("ttf\DejaVuSans.ttf", 25)
 	fio_lines = SplitAndWrapString(DataRxTx.GetFioRx(), [30, 30, 0])
 	if (len(fio_lines) > 0):
-		imagePck.text((520, 390), fio_lines[0], (0,0,0), font = font)
+		imagePck.text(dict_coordinates['recipients_name_1'][1], fio_lines[0], (0,0,0), font = font)
 	if (len(fio_lines) > 1):
-		imagePck.text((470, 430), fio_lines[1], (0,0,0), font = font)
+		imagePck.text(dict_coordinates['recipients_name_2'][1], fio_lines[1], (0,0,0), font = font)
 	
 
 	#draw recipient's address on "posilka blank"
 	font = ImageFont.truetype("ttf\DejaVuSans.ttf", 30)
-	adr_lines = SplitAndWrapString(DataRxTx.GetAddressRx(), [25, 30, 30])
+	adr_lines = SplitAndWrapString(DataRxTx.GetAddressRx(), [40, 50, 50, 30])
 	if (len(adr_lines) > 0):
-		imagePck.text((530, 467), adr_lines[0], (0,0,0), font = font)
+		imagePck.text(dict_coordinates['recipients_address_1'][1], adr_lines[0], (0,0,0), font = font)
 	if (len(adr_lines) > 1):
-		imagePck.text((480, 505), adr_lines[1], (0,0,0), font = font)
+		imagePck.text(dict_coordinates['recipients_address_2'][1], adr_lines[1], (0,0,0), font = font)
 	if (len(adr_lines) > 2):
-		imagePck.text((480, 540), adr_lines[2], (0,0,0), font = font)
+		imagePck.text(dict_coordinates['recipients_address_3'][1], adr_lines[2], (0,0,0), font = font)
+	if (len(adr_lines) > 3):
+		imagePck.text(dict_coordinates['recipients_address_4'][1], adr_lines[3], (0,0,0), font = font)
 	
 	#if "nalojenii platej" put X
+	font = ImageFont.truetype("ttf\DejaVuSans.ttf", 40)
+	dict_coordinates['X'] = [(546,172),(875, 300)]
 	if (cash):
-		imagePck.text((546, 172), "x", (0,0,0), font = font)
+		imagePck.text(dict_coordinates['X'][1], "x", (0,0,0), font = font)
 	
 	#draw recipient's index on  "posilka blank"
-	font = ImageFont.truetype("ttf\DejaVuSans.ttf", 55)
+	font1 = ImageFont.truetype("ttf\DejaVuSans.ttf", 80)
+	font2 = ImageFont.truetype("ttf\DejaVuSans.ttf", 60)
 	ind = DataRxTx.GetIndexRx()
 	if (len(ind) == 6):
 		for i in range(0, 6):
-			imagePck.text((90 + 58 * i, 600), ind[i], (0,0,0), font = font) 
-			
+			imagePck.text((dict_coordinates['recipient_index1'][1][0] + 110 * i, dict_coordinates['recipient_index1'][1][1]), ind[i], (0,0,0), font = font1) 
+			imagePck.text((dict_coordinates['recipient_index2'][1][0] + 60 * i, dict_coordinates['recipient_index2'][1][1]), ind[i], (0,0,0), font = font2) 
 	#draw sender's name on "posilka blank"
+	dict_coordinates['sender_name_1'] = [(100,240),(190, 430)]
+	dict_coordinates['sender_name_2'] = [(45,275),(60, 500)]
 	font = ImageFont.truetype("ttf\DejaVuSans.ttf", 25)
 	whom_splitted = DataRxTx.GetFioTx().split()
-	imagePck.text((100, 240), whom_splitted[0] + " " + whom_splitted[1], (0,0,0), font = font)
-	imagePck.text((45, 275), whom_splitted[2], (0,0,0), font = font)
+	imagePck.text(dict_coordinates['sender_name_1'][1], whom_splitted[0] + " " + whom_splitted[1], (0,0,0), font = font)
+	imagePck.text(dict_coordinates['sender_name_2'][1], whom_splitted[2], (0,0,0), font = font)
 	
 	#draw sender's address on "posilka blank"
+	dict_coordinates['sender_address_1'] = [(85,321),(190, 580)]
+	dict_coordinates['sender_address_2'] = [(45,360),(50, 640)]
+	dict_coordinates['sender_address_3'] = [(45,400),(50, 710)]
 	font = ImageFont.truetype("ttf\DejaVuSans.ttf", 25)
-	where_lines = SplitAndWrapString(DataRxTx.GetAddressTx(), [25, 30, 10])	
+	where_lines = SplitAndWrapString(DataRxTx.GetAddressTx(), [35, 40, 20])	
 	if (len(where_lines) > 0):	
-		imagePck.text((85, 321), where_lines[0], (0,0,0), font = font)
+		imagePck.text(dict_coordinates['sender_address_1'][1], where_lines[0], (0,0,0), font = font)
 	if (len(where_lines) > 1):	
-		imagePck.text((45, 360), where_lines[1], (0,0,0), font = font)
+		imagePck.text(dict_coordinates['sender_address_2'][1], where_lines[1], (0,0,0), font = font)
 	if (len(where_lines) > 2):	
-		imagePck.text((45, 400), where_lines[2], (0,0,0), font = font)
+		imagePck.text(dict_coordinates['sender_address_3'][1], where_lines[2], (0,0,0), font = font)
 	
 	#draw sender's index on "posilka blank"
+	dict_coordinates['sender_index'] = [(225,388),(410, 680)]
 	ind = DataRxTx.GetIndexTx()
 	font = ImageFont.truetype("ttf\DejaVuSans.ttf", 40)
 	if (len(ind) == 6):
 		for i in range(0, 6):
-			imagePck.text((225 + 34 * i, 388), ind[i], (0,0,0), font = font)
+			imagePck.text((dict_coordinates['sender_index'][1][0] + i * 60, dict_coordinates['sender_index'][1][1]), ind[i], (0,0,0), font = font)
 	
 	if (cash):
 		#Converting sum of cash into words
@@ -253,9 +278,12 @@ def DrawBlankAddress(imagePck, DataRxTx, cash):
 		
 		#draw sum of cash (rubles) with words on "posilka blank"
 		#width = 500px
-		font_size, ch_w = FinfFontSize(imagePck, summ_str, 520)
+		dict_coordinates['summ_1'] = [(445,260),(785, 455)]
+		dict_coordinates['summ_2'] = [(530,340),(785, 580)]
+		font_size, ch_w = FinfFontSize(imagePck, summ_str, 900)
 		font = ImageFont.truetype("ttf\DejaVuSans.ttf", font_size)
-		imagePck.text((445, 260 + (50 - ch_w) / 2 ), summ_str, (0,0,0), font = font)
-		
+		imagePck.text((dict_coordinates['summ_1'][1][0], (dict_coordinates['summ_1'][1][1] + (50 - ch_w) / 2)), summ_str, (0,0,0), font = font)
+		summ_str = str(int(rub)) +' (' + summ_str + ')'
+		font_size, ch_w = FinfFontSize(imagePck, summ_str, 900)
 		font = ImageFont.truetype("ttf\DejaVuSans.ttf", 35)
-		imagePck.text((530, 340), str(int(rub)), (0,0,0), font = font)
+		imagePck.text((dict_coordinates['summ_2'][1][0], (dict_coordinates['summ_2'][1][1] + (50 - ch_w) / 2)), summ_str, (0,0,0), font = font)
