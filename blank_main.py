@@ -9,12 +9,12 @@ from infoRxTx import infoRxTx
 
 class MainFrame(wx.Frame):
 	def __init__(self):
-		wx.Frame.__init__(self, None, title= u"Интерет Магазин Пневматики Popadiv10.ru", pos=(150,150), size=(830,670))
+		wx.Frame.__init__(self, None, title= u"Blank Generator", pos=(150,150), size=(830,670))
 
 		self.CreateStatusBar()
 		# A Statusbar in the bottom of the window
 		#self.statusbar = self.CreateStatusBar(style=0)
-		self.SetStatusText('autor:Gutu Grigori Grigori')
+		self.SetStatusText('author:Gutu Grigori Grigori')
 		
 		# Setting up the menu.
 		filemenu= wx.Menu()

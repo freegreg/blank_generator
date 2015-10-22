@@ -6,6 +6,7 @@ import numbertoword
 import webbrowser
 from PIL import Image
 from PIL import ImageDraw
+from PIL import ImageOps
 from xlrd import open_workbook, XLRDError
 import os
 import re
@@ -68,7 +69,7 @@ class RxPage(wx.Panel):
 		self.Bind(wx.EVT_TEXT, self.onTextChanged, self.textPathToExcelFile)
 		self.Bind(wx.EVT_TEXT, self.onTextChanged, self.textPathToBlankFolder)
 		self.Bind(wx.EVT_ERASE_BACKGROUND, self.OnEraseBackground)
-		self.Bind(wx.EVT_LEFT_UP, self.onClick)
+		#self.Bind(wx.EVT_LEFT_UP, self.onClick)
 		self.Bind(wx.EVT_CHECKBOX, self.FromExcel, self.cbFromExcel)
 		
 		# Use some sizers to see layout options
@@ -241,12 +242,14 @@ class RxPage(wx.Panel):
 						count = count + delta_count
 						dialog.Update(count)
 						blankDrawer.DrawBlankAddress(drawpck, self.DataRxTx, values[1] > 0, [1748, 1240])
+						
 						count = count + delta_count
 						dialog.Update(count)
 						if (self.PathToBlanksFolder):
 							img2new.save(self.PathToBlanksFolder + u"\бланк_" + str(index_row) + u".jpg")
 							if (values[1] > 0):
 								img1new.save(self.PathToBlanksFolder + u"\бланк_наложенного_" + str(index_row) + u".jpg")
+							imgpcknew = ImageOps.expand(imgpcknew,border=6,fill='black')
 							imgpcknew.save(self.PathToBlanksFolder + u"\бланк_адресной_" + str(index_row) + u".jpg")
 						#print u','.join(list_from_excel)
 					index_row = index_row + 1
