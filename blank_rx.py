@@ -207,6 +207,8 @@ class RxPage(wx.Panel):
 						values = []
 						for col in range(s.ncols):
 							values.append(s.cell(row,col).value)
+						while (len(values) < 6):
+							values.append('')
 						list_from_excel = list(str(v) if not isinstance(v, unicode) else v for v in values)
 						list_from_excel[0] = str(values[0]) if not isinstance(values[0], unicode) else values[0]
 						list_from_excel[1] = str(values[2]) if not isinstance(values[2], unicode) else values[2]
@@ -225,6 +227,11 @@ class RxPage(wx.Panel):
 						except ValueError:
 							list_from_excel[4] = values[4]
 						list_from_excel[4] = str(list_from_excel[4])
+						if isinstance(values[5], unicode):
+							list_from_excel[5] = values[5]
+							#self.Warn(u"Неверный вес в строке %d" % index_row)
+						elif isinstance(values[5], float):
+							list_from_excel[5] = '{:.2f}'.format(values[5]/1000) + u' кг'
 						#list_from_excel.append(list_from_excel[1])
 						#del list_from_excel[1]
 						self.DataRxTx.SetRecipientInformation(list_from_excel)

@@ -37,6 +37,7 @@ def FinfFontSize(imagePck, stringText, width_limit, max_fontsize = 50):
 	return font_size, str_h
 
 def DrawBlankCash(imageBlank1, DataRxTx, cash):
+	
 	#draw recipient's name on "blank 1"
 	font = ImageFont.truetype("ttf\DejaVuSans.ttf", 35)
 	#print DataRxTx.GetFioRx()
@@ -122,6 +123,12 @@ def DrawBlankMain(imageBlank2, DataRxTx, cash):
 		imageBlank2.text((450, 2070), str(int(rub)), (0,0,0), font = font)
 		imageBlank2.text((1160, 2080), str(int(rub)), (0,0,0), font = font)
 	
+	#draw weight
+	weight = DataRxTx.GetWeight()
+	font = ImageFont.truetype("ttf\DejaVuSans.ttf", 50)
+	imageBlank2.text((1180, 760), weight, (0,0,0), font = font)
+
+	
 	#draw recipient's name on "blank 2"
 	font = ImageFont.truetype("ttf\DejaVuSans.ttf", 30)
 	imageBlank2.text((385, 935), DataRxTx.GetFioRx(), (0,0,0), font = font)
@@ -200,6 +207,18 @@ def DrawBlankAddress(imagePck, DataRxTx, cash, resolution):
 	dict_coordinates['recipients_address_4_line'] = [(480,575),(830, 1093, 1430, 1093)]
 	dict_coordinates['recipient_index1'] = [(90,600),(155, 1070)]
 	dict_coordinates['recipient_index2'] = [(90,600),(1350, 960)]
+	dict_coordinates['weight'] = [(90,600),(145, 790)]
+
+	#draw weight
+	#25
+	#315
+	weight = DataRxTx.GetWeight()
+	weight_indent = 0
+	if (len(weight) <= 12):
+		weight_indent = (12 - len(weight))*25/2
+	font = ImageFont.truetype("ttf\DejaVuSans.ttf", 40)
+	imagePck.text((dict_coordinates['weight'][1][0] + weight_indent, dict_coordinates['weight'][1][1]), weight, (0,0,0), font = font)
+	
 	#draw pack Number
 	font = ImageFont.truetype("ttf\DejaVuSans.ttf", 70)
 	imagePck.text(dict_coordinates['pack_number'][1], DataRxTx.GetPackNumber(), (0,0,0), font = font)
